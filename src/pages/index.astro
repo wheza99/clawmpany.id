@@ -1,436 +1,51 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import { type CollectionEntry, getCollection } from "astro:content";
+
+import MetafiCta from "@/components/sections/matafi-cta";
+import MetafiFaq from "@/components/sections/metafi-faq";
+import MetafiFeaturedBlogPosts from "@/components/sections/metafi-featured-blog-posts";
+import MetafiFeatures from "@/components/sections/metafi-features";
+import MetafiHero from "@/components/sections/metafi-hero";
+import MetafiIntegrations from "@/components/sections/metafi-integrations";
+import MetafiLogos from "@/components/sections/metafi-logos";
+import MetafiTestimonials from "@/components/sections/metafi-testimonials";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+
+type BlogEntry = CollectionEntry<"blog">;
+
+const entries: BlogEntry[] = await getCollection("blog");
+
+const allPosts = entries.map((p) => ({
+  slug: p.id,
+  title: (p.data.title || p.id.replace(/-/g, " ")).trim(),
+  description: p.data.description ?? "",
+  tagline: p.data.tagline ?? "",
+  author: p.data.author ?? "",
+  date: (p.data.date ?? p.data.published)?.toISOString() ?? "",
+  coverImage: p.data.coverImage ?? p.data.image ?? "",
+  latest: !!p.data.latest,
+}));
+
+const latest = allPosts.filter((p) => p.latest).slice(0, 4);
+
+const cards = latest.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  intro: p.description,
+  tagline: p.tagline,
+  author: p.author,
+  date: p.date,
+  coverImage: p.coverImage,
+}));
 ---
 
-<Layout title="Clawmpany — Virtual Office untuk AI Agents">
-
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-sm">C</span>
-          </div>
-          <span class="text-xl font-bold text-navy-900">Clawmpany</span>
-        </div>
-        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-          <a href="#features" class="hover:text-accent transition-colors">Fitur</a>
-          <a href="#how-it-works" class="hover:text-accent transition-colors">Cara Kerja</a>
-          <a href="#pricing" class="hover:text-accent transition-colors">Harga</a>
-          <a href="#faq" class="hover:text-accent transition-colors">FAQ</a>
-        </div>
-        <a href="https://app.clawmpany.id" class="hidden md:inline-flex items-center px-4 py-2 bg-white/10 text-white text-sm font-semibold rounded-lg hover:bg-white/20 transition-colors border border-white/20">
-          Login
-        </a>
-        <a href="#pricing" class="hidden md:inline-flex items-center px-4 py-2 bg-accent text-white text-sm font-semibold rounded-lg hover:bg-accent-dark transition-colors">
-          Mulai Sekarang
-        </a>
-        <!-- Mobile menu button -->
-        <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 pb-4">
-      <div class="flex flex-col gap-3 pt-3 text-sm font-medium text-gray-600">
-        <a href="#features" class="hover:text-accent">Fitur</a>
-        <a href="#how-it-works" class="hover:text-accent">Cara Kerja</a>
-        <a href="#pricing" class="hover:text-accent">Harga</a>
-        <a href="#faq" class="hover:text-accent">FAQ</a>
-        <hr class="my-1">
-        <a href="/privacy-policy" class="hover:text-accent text-xs">Kebijakan Privasi</a>
-        <a href="/terms-of-service" class="hover:text-accent text-xs">Ketentuan Layanan</a>
-        <a href="https://app.clawmpany.id" class="inline-flex items-center justify-center px-4 py-2 bg-accent text-white font-semibold rounded-lg">Sewa Sekarang</a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700">
-    <!-- Abstract background -->
-    <div class="absolute inset-0 opacity-20">
-      <div class="absolute top-20 left-10 w-72 h-72 bg-accent rounded-full filter blur-3xl"></div>
-      <div class="absolute bottom-10 right-10 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl"></div>
-    </div>
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-accent-light text-sm font-medium mb-8">
-        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-        Powered by OpenClaw
-      </div>
-      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight mb-6">
-        Bangun Tim AI Anda<br />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-light to-blue-300">dalam Hitungan Menit</span>
-      </h1>
-      <p class="text-lg md:text-xl text-blue-200 max-w-2xl mx-auto mb-10 leading-relaxed">
-        Sewa server VPS Tencent Cloud yang sudah terkonfigurasi untuk menjalankan AI agents. Powered by OpenClaw — tanpa ribet, tanpa oprek server.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="https://app.clawmpany.id" class="inline-flex items-center justify-center px-8 py-4 bg-accent text-white font-semibold rounded-xl hover:bg-accent-dark transition-all hover:shadow-lg hover:shadow-accent/25 text-lg">
-          Mulai Sewa Kantor →
-        </a>
-        <a href="#pricing" class="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-all border border-white/20 text-lg">
-          Lihat Paket Harga
-        </a>
-      </div>
-      <p class="mt-6 text-sm text-blue-300">⚡ Setup 5 menit · Langsung aktif setelah bayar</p>
-    </div>
-  </section>
-
-  <!-- Value Props -->
-  <section id="features" class="py-20 md:py-28 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-4">Kenapa Clawmpany?</h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Bukan sekadar VPS. Ini kantor virtual lengkap untuk AI workforce Anda.</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- Card 1 -->
-        <div class="p-6 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-xl transition-all group">
-          <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">🏢</div>
-          <h3 class="text-lg font-bold text-navy-900 mb-2">Kantor Siap Pakai</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">Bukan sekadar server kosong. Setiap "kantor" sudah dikonfigurasi dan siap dihuni AI agents Anda. Tinggal pindah masuk.</p>
-        </div>
-        <!-- Card 2 -->
-        <div class="p-6 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-xl transition-all group">
-          <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">👥</div>
-          <h3 class="text-lg font-bold text-navy-900 mb-2">Kelola Tim AI</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">Tambah, atur, dan monitor AI agents dari satu dashboard. Seperti HR system untuk workforce digital Anda.</p>
-        </div>
-        <!-- Card 3 -->
-        <div class="p-6 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-xl transition-all group">
-          <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">⚡</div>
-          <h3 class="text-lg font-bold text-navy-900 mb-2">Performa 24/7</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">Didukung infrastruktur cloud terbaik. AI agents Anda bekerja tanpa henti, tanpa downtime.</p>
-        </div>
-        <!-- Card 4 -->
-        <div class="p-6 rounded-2xl bg-gray-50 hover:bg-white hover:shadow-xl transition-all group">
-          <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">🔐</div>
-          <h3 class="text-lg font-bold text-navy-900 mb-2">Keamanan Enterprise</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">Data dan komunikasi agents terenkripsi end-to-end. Setiap kantor virtual terisolasi, privasi bisnis Anda terjaga.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- How It Works -->
-  <section id="how-it-works" class="py-20 md:py-28 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-4">Cara Kerja</h2>
-        <p class="text-lg text-gray-600">Tiga langkah sederhana untuk membangun AI workforce Anda.</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-        <div class="text-center">
-          <div class="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">1</div>
-          <h3 class="text-xl font-bold text-navy-900 mb-3">Pilih Kantor</h3>
-          <p class="text-gray-600">Pilih paket sesuai kebutuhan — dari studio cozy hingga executive tower. Semua siap dihuni.</p>
-        </div>
-        <div class="text-center">
-          <div class="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">2</div>
-          <h3 class="text-xl font-bold text-navy-900 mb-3">Rekrut Agent</h3>
-          <p class="text-gray-600">Deploy AI agents ke kantor Anda. Konfigurasi sesuai kebutuhan bisnis — customer service, analisis data, dan lainnya.</p>
-        </div>
-        <div class="text-center">
-          <div class="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">3</div>
-          <h3 class="text-xl font-bold text-navy-900 mb-3">Biarkan Bekerja</h3>
-          <p class="text-gray-600">Agents Anda bekerja 24/7. Anda tinggal monitor hasil dan performa dari dashboard intuitif.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Features Deep Dive -->
-  <section class="py-20 md:py-28 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-      <!-- Feature 1 -->
-      <div class="flex flex-col md:flex-row items-center gap-12">
-        <div class="flex-1">
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 rounded-full text-accent text-sm font-semibold mb-4">Dashboard</div>
-          <h3 class="text-2xl md:text-3xl font-bold text-navy-900 mb-4">Dashboard yang Intuitif</h3>
-          <p class="text-gray-600 leading-relaxed mb-6">Kelola semua AI agents dari satu tempat. Monitor performa, atur task, dan lihat hasil kerja real-time. Tidak perlu keahlian teknis.</p>
-          <ul class="space-y-3 text-gray-600">
-            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Real-time monitoring</li>
-            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Task management terintegrasi</li>
-            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Analytics & reporting</li>
-          </ul>
-        </div>
-        <div class="flex-1">
-          <div class="bg-gradient-to-br from-navy-900 to-navy-700 rounded-2xl p-8 aspect-video flex items-center justify-center">
-            <div class="bg-white/10 backdrop-blur rounded-xl p-6 w-full">
-              <div class="flex items-center gap-2 mb-4">
-                <div class="w-3 h-3 bg-red-400 rounded-full"></div>
-                <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-                <span class="text-white/50 text-xs ml-2">app.clawmpany.id</span>
-              </div>
-              <div class="grid grid-cols-3 gap-3">
-                <div class="bg-accent/20 rounded-lg p-3">
-                  <div class="text-accent-light text-xs mb-1">Active Agents</div>
-                  <div class="text-white font-bold text-lg">8</div>
-                </div>
-                <div class="bg-green-500/20 rounded-lg p-3">
-                  <div class="text-green-300 text-xs mb-1">Tasks Done</div>
-                  <div class="text-white font-bold text-lg">1,247</div>
-                </div>
-                <div class="bg-purple-500/20 rounded-lg p-3">
-                  <div class="text-purple-300 text-xs mb-1">Uptime</div>
-                  <div class="text-white font-bold text-lg">99.9%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Feature 2 -->
-      <div class="flex flex-col md:flex-row-reverse items-center gap-12">
-        <div class="flex-1">
-          <div class="inline-flex items-center gap-2 px-3 py-1 bg-green-50 rounded-full text-green-600 text-sm font-semibold mb-4">Skalabel</div>
-          <h3 class="text-2xl md:text-3xl font-bold text-navy-900 mb-4">Skalabel Sesuai Pertumbuhan</h3>
-          <p class="text-gray-600 leading-relaxed mb-6">Mulai dari studio kecil, upgrade seiring bisnis berkembang. Tanpa downtime, tanpa migrasi data. Scale tanpa batas.</p>
-          <ul class="space-y-3 text-gray-600">
-            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Upgrade/downgrade instan</li>
-            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Zero downtime migration</li>
-            <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Pay as you grow</li>
-          </ul>
-        </div>
-        <div class="flex-1">
-          <div class="bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl p-8 flex items-center justify-center">
-            <div class="text-center">
-              <div class="flex items-end justify-center gap-4 mb-4">
-                <div class="w-16 bg-accent/30 rounded-t-lg" style="height:60px"></div>
-                <div class="w-16 bg-accent/50 rounded-t-lg" style="height:90px"></div>
-                <div class="w-16 bg-accent/70 rounded-t-lg" style="height:130px"></div>
-                <div class="w-16 bg-accent rounded-t-lg" style="height:180px"></div>
-              </div>
-              <p class="text-sm text-gray-500 font-medium">Pertumbuhan tanpa batas</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing" class="py-20 md:py-28 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-4">Pilih Kantor Anda</h2>
-        <p class="text-lg text-gray-600">Bayar dari hari pertama. Langsung aktif, langsung produktif.</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-        <!-- Cozy Studio -->
-        <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all border border-gray-100">
-          <div class="text-3xl mb-3">🏠</div>
-          <h3 class="text-xl font-bold text-navy-900">Cozy Studio</h3>
-          <p class="text-sm text-gray-500 mt-1 mb-4">Cocok untuk freelancer & solopreneur</p>
-          <div class="flex items-center gap-3 mb-4 text-xs text-gray-500">
-            <span class="px-2 py-1 bg-gray-100 rounded-md font-mono">2 vCPU</span>
-            <span class="px-2 py-1 bg-gray-100 rounded-md font-mono">2 GB RAM</span>
-            <span class="px-2 py-1 bg-gray-100 rounded-md font-mono">SSD</span>
-          </div>
-          <div class="mb-6">
-            <span class="text-4xl font-extrabold text-navy-900">Rp 300rb</span>
-            <span class="text-gray-500">/30 hari</span>
-          </div>
-          <ul class="space-y-3 text-sm text-gray-600 mb-8">
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Server VPS Tencent Cloud</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Akses OpenClaw dashboard</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Hingga 5 AI agents</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Chat langsung dengan agents</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Email support</li>
-          </ul>
-          <a href="https://app.clawmpany.id" class="block w-full text-center px-6 py-3 border-2 border-accent text-accent font-semibold rounded-xl hover:bg-accent hover:text-white transition-all">
-            Sewa Sekarang
-          </a>
-        </div>
-        <!-- Business Suite -->
-        <div class="bg-navy-900 rounded-2xl p-8 shadow-xl relative border-2 border-accent">
-          <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-accent text-white text-sm font-semibold rounded-full">Populer</div>
-          <div class="text-3xl mb-3">🏢</div>
-          <h3 class="text-xl font-bold text-white">Business Suite</h3>
-          <p class="text-sm text-blue-200 mt-1 mb-4">Cocok untuk startup & small business</p>
-          <div class="flex items-center gap-3 mb-4 text-xs text-blue-300">
-            <span class="px-2 py-1 bg-white/10 rounded-md font-mono">2 vCPU</span>
-            <span class="px-2 py-1 bg-white/10 rounded-md font-mono">4 GB RAM</span>
-            <span class="px-2 py-1 bg-white/10 rounded-md font-mono">SSD</span>
-          </div>
-          <div class="mb-6">
-            <span class="text-4xl font-extrabold text-white">Rp 600rb</span>
-            <span class="text-blue-300">/30 hari</span>
-          </div>
-          <ul class="space-y-3 text-sm text-blue-200 mb-8">
-            <li class="flex items-center gap-2"><span class="text-accent-light">✓</span> Server VPS Tencent Cloud</li>
-            <li class="flex items-center gap-2"><span class="text-accent-light">✓</span> Akses OpenClaw dashboard</li>
-            <li class="flex items-center gap-2"><span class="text-accent-light">✓</span> Hingga 10 AI agents</li>
-            <li class="flex items-center gap-2"><span class="text-accent-light">✓</span> Chat langsung dengan agents</li>
-            <li class="flex items-center gap-2"><span class="text-accent-light">✓</span> Priority support</li>
-          </ul>
-          <a href="https://app.clawmpany.id" class="block w-full text-center px-6 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent-dark transition-all">
-            Sewa Sekarang
-          </a>
-        </div>
-        <!-- Executive Tower -->
-        <div class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all border border-gray-100">
-          <div class="text-3xl mb-3">🏛️</div>
-          <h3 class="text-xl font-bold text-navy-900">Executive Tower</h3>
-          <p class="text-sm text-gray-500 mt-1 mb-4">Cocok untuk growing business</p>
-          <div class="flex items-center gap-3 mb-4 text-xs text-gray-500">
-            <span class="px-2 py-1 bg-gray-100 rounded-md font-mono">2 vCPU</span>
-            <span class="px-2 py-1 bg-gray-100 rounded-md font-mono">8 GB RAM</span>
-            <span class="px-2 py-1 bg-gray-100 rounded-md font-mono">SSD</span>
-          </div>
-          <div class="mb-6">
-            <span class="text-4xl font-extrabold text-navy-900">Rp 1.2jt</span>
-            <span class="text-gray-500">/30 hari</span>
-          </div>
-          <ul class="space-y-3 text-sm text-gray-600 mb-8">
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Server VPS Tencent Cloud</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Akses OpenClaw dashboard</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Hingga 20 AI agents</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Chat langsung dengan agents</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> Dedicated support</li>
-            <li class="flex items-center gap-2"><span class="text-accent">✓</span> API access</li>
-          </ul>
-          <a href="https://app.clawmpany.id" class="block w-full text-center px-6 py-3 border-2 border-accent text-accent font-semibold rounded-xl hover:bg-accent hover:text-white transition-all">
-            Sewa Sekarang
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="py-20 md:py-28 bg-white">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-4">Pertanyaan Umum</h2>
-      </div>
-      <div class="space-y-4" id="faq-list">
-        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left font-semibold text-navy-900 hover:bg-gray-50 transition-colors">
-            <span>Apa itu Clawmpany?</span>
-            <span class="faq-icon text-accent text-xl transition-transform">+</span>
-          </button>
-          <div class="faq-content hidden px-6 pb-6 text-gray-600">
-            Clawmpany adalah platform yang menyediakan kantor virtual (VPS) yang dioptimalkan untuk menjalankan AI agents. Bayangkan seperti menyewa ruang kantor, tapi untuk tim AI Anda.
-          </div>
-        </div>
-        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left font-semibold text-navy-900 hover:bg-gray-50 transition-colors">
-            <span>Apa itu AI Agent?</span>
-            <span class="faq-icon text-accent text-xl transition-transform">+</span>
-          </button>
-          <div class="faq-content hidden px-6 pb-6 text-gray-600">
-            AI Agent adalah asisten digital yang bisa menjalankan tugas secara mandiri — dari menjawab email, mengelola data, hingga menganalisis pasar. Di Clawmpany, setiap agent adalah "karyawan" di kantor virtual Anda.
-          </div>
-        </div>
-        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left font-semibold text-navy-900 hover:bg-gray-50 transition-colors">
-            <span>Apakah saya perlu keahlian teknis?</span>
-            <span class="faq-icon text-accent text-xl transition-transform">+</span>
-          </button>
-          <div class="faq-content hidden px-6 pb-6 text-gray-600">
-            Tidak! Kami merancang Clawmpany agar mudah digunakan siapa saja. Tinggal pilih paket, deploy agent, dan biarkan mereka bekerja. Dashboard kami sangat intuitif.
-          </div>
-        </div>
-        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left font-semibold text-navy-900 hover:bg-gray-50 transition-colors">
-            <span>Bisa upgrade paket kapan saja?</span>
-            <span class="faq-icon text-accent text-xl transition-transform">+</span>
-          </button>
-          <div class="faq-content hidden px-6 pb-6 text-gray-600">
-            Tentu! Upgrade atau downgrade kapan saja tanpa downtime. Anda hanya bayar selisih harga untuk sisa periode berjalan.
-          </div>
-        </div>
-        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left font-semibold text-navy-900 hover:bg-gray-50 transition-colors">
-            <span>Apakah data saya aman?</span>
-            <span class="faq-icon text-accent text-xl transition-transform">+</span>
-          </button>
-          <div class="faq-content hidden px-6 pb-6 text-gray-600">
-            Sangat aman. Semua data terenkripsi end-to-end, dan setiap kantor virtual terisolasi satu sama lain. Privasi bisnis Anda adalah prioritas utama kami.
-          </div>
-        </div>
-        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
-          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left font-semibold text-navy-900 hover:bg-gray-50 transition-colors">
-            <span>Bagaimana sistem pembayaran?</span>
-            <span class="faq-icon text-accent text-xl transition-transform">+</span>
-          </button>
-          <div class="faq-content hidden px-6 pb-6 text-gray-600">
-            Pembayaran dilakukan di awal, dan kantor virtual Anda langsung aktif setelah pembayaran berhasil. Semua fitur langsung bisa digunakan dari menit pertama.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="py-20 md:py-28 bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Siap Bangun Tim AI Anda?</h2>
-      <p class="text-lg text-blue-200 mb-8 max-w-2xl mx-auto">Mulai dari kantor kecil, impian besar. Sewa kantor virtual dan deploy AI workforce Anda hari ini.</p>
-      <a href="https://app.clawmpany.id" class="inline-flex items-center justify-center px-8 py-4 bg-accent text-white font-semibold rounded-xl hover:bg-accent-dark transition-all hover:shadow-lg hover:shadow-accent/25 text-lg">
-        Mulai Sekarang →
-      </a>
-      <p class="mt-4 text-sm text-blue-300">Setup 5 menit · Langsung aktif · Cancel kapan saja</p>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-navy-900 text-blue-200 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-sm">C</span>
-          </div>
-          <span class="text-white font-bold">Clawmpany</span>
-        </div>
-        <div class="flex items-center gap-6 text-sm">
-          <a href="/privacy-policy" class="hover:text-white transition-colors">Kebijakan Privasi</a>
-          <a href="/terms-of-service" class="hover:text-white transition-colors">Ketentuan Layanan</a>
-          <a href="#" class="hover:text-white transition-colors">Kontak</a>
-        </div>
-        <p class="text-sm text-blue-300">© 2026 Clawmpany. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- FAQ Toggle Script -->
-  <script>
-    document.querySelectorAll('.faq-toggle').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const content = btn.nextElementSibling;
-        const icon = btn.querySelector('.faq-icon');
-        const isOpen = !content.classList.contains('hidden');
-        
-        // Close all
-        document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
-        document.querySelectorAll('.faq-icon').forEach(i => { i.textContent = '+'; i.style.transform = ''; });
-        
-        if (!isOpen) {
-          content.classList.remove('hidden');
-          icon.textContent = '−';
-          icon.style.transform = 'rotate(180deg)';
-        }
-      });
-    });
-
-    // Mobile menu toggle
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    menuBtn?.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
-
-    // Close mobile menu on link click
-    mobileMenu?.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-    });
-  </script>
-
-</Layout>
+<DefaultLayout title="Home" description="Metafi">
+  <MetafiHero client:load />
+  <MetafiLogos />
+  <MetafiFeatures client:load />
+  <MetafiIntegrations />
+  <MetafiTestimonials client:load />
+  <MetafiFaq client:load />
+  <MetafiFeaturedBlogPosts posts={cards} />
+  <MetafiCta />
+</DefaultLayout>

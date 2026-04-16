@@ -1,0 +1,23 @@
+---
+import BaseHead from "@/components/BaseHead.astro";
+import Banner from "@/components/sections/banner";
+import { Footer } from "@/components/sections/footer";
+import Navbar from "@/components/sections/navbar";
+
+const { title, description } = Astro.props;
+---
+
+<html lang="id">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="h-screen antialiased">
+    <Banner
+      client:load
+      url="https://www.shadcnblocks.com/template/metafi?bundle=astro"
+    />
+    <Navbar client:load />
+    <main><slot /></main>
+    <Footer />
+  </body>
+</html>
