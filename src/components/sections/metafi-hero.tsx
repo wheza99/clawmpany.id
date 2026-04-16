@@ -61,7 +61,7 @@ const MetafiHero = () => {
             src="/images/homepage/hero/Dashboard.webp"
             alt="Clawmpany dashboard preview"
             width={994}
-            height={707}
+            height={560}
             sizes="(max-width: 1024px) 100vw, 994px"
             className="h-auto w-full rounded-t-[16px] object-cover object-top"
             loading="eager"
