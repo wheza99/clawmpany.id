@@ -24,7 +24,7 @@ const columns = [
       { name: "Ketentuan Layanan", href: "/terms" },
       { name: "Kebijakan Cookie", href: "/cookie-policy" },
       { name: "Daftar", href: "/signup" },
-      { name: "Login", href: "/login" },
+      { name: "Login", href: "https://app.clawmpany.id" },
     ],
   },
 ];

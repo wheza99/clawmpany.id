@@ -104,7 +104,7 @@ const Navbar = () => {
         </nav>
 
         <div className="flex items-center gap-2.5">
-          <a href="/login" className={cn("hidden sm:block lg:block")}>
+          <a href="https://app.clawmpany.id" className={cn("hidden sm:block lg:block")}>
             <Button size="sm" variant="outline">
               Login
             </Button>

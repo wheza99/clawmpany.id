@@ -8,6 +8,7 @@ type Feature = {
   description: string;
   image: string;
   href?: string;
+  objectPosition?: string;
 };
 
 const FEATURES: Feature[] = [
@@ -15,25 +16,27 @@ const FEATURES: Feature[] = [
     title: "Virtual Office",
     description:
       "Bukan sekadar server kosong. Setiap “kantor” sudah dikonfigurasi dan siap dihuni AI agents Anda. Tinggal pindah masuk.",
-    image: "/images/homepage/features/animation1.svg",
+    image: "/images/homepage/features/virtual-office.webp",
   },
   {
     title: "AI Agent Management",
     description:
       "Tambah, atur, dan monitor AI agents dari satu dashboard. Seperti HR system untuk workforce digital Anda.",
-    image: "/images/homepage/features/recurring-billing.webp",
+    image: "/images/homepage/features/ai-agent-management.webp",
+    objectPosition: "left",
   },
   {
-    title: "Performa 24/7",
+    title: "Monitoring Real-time",
     description:
-      "Didukung infrastruktur cloud terbaik. AI agents Anda bekerja tanpa henti, tanpa downtime, dengan monitoring real-time.",
-    image: "/images/homepage/features/invoicing.webp",
+      "Pantau aktivitas dan log setiap AI agent secara live. Ketahui apa yang dikerjakan agents Anda, kapan saja, dari mana saja.",
+    image: "/images/homepage/features/realtime-monitoring.webp",
+    objectPosition: "right",
   },
   {
-    title: "Keamanan Enterprise",
+    title: "1 Office 1 Server",
     description:
-      "Data dan komunikasi agents terenkripsi end-to-end. Setiap kantor virtual terisolasi, privasi bisnis Anda terjaga.",
-    image: "/images/homepage/features/payment-link.webp",
+      "Setiap kantor virtual mendapat server terisolasi sendiri. Data dan komunikasi agents Anda terenkripsi end-to-end, privasi bisnis terjaga.",
+    image: "/images/homepage/features/monitoring.webp",
   },
 ];
 
@@ -66,7 +69,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
             <img
               src={feature.image}
               alt={feature.title}
-              className="absolute inset-0 h-full w-full object-cover"
+              className={`absolute inset-0 h-full w-full object-cover ${feature.objectPosition === "left" ? "object-left" : feature.objectPosition === "right" ? "object-right" : "object-center"}`}
               loading="lazy"
               decoding="async"
             />
